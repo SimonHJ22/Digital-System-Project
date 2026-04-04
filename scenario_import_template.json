@@ -1,0 +1,481 @@
+{
+  "scenarioName": "Imported HCM Shared Lane Test",
+  "geometry": {
+    "intersectionName": "HCM Shared Lane Test",
+    "areaType": "Other",
+    "numberOfApproaches": 4,
+    "selectedApproach": "Northbound",
+    "approaches": {
+      "Northbound": {
+        "numberOfLanes": 3,
+        "laneWidth": 3.5,
+        "grade": 0,
+        "storageLength": 35,
+        "exclusiveLeftTurnLane": false,
+        "exclusiveRightTurnLane": true,
+        "parkingAdjacent": false,
+        "busStopNearStopLine": false,
+        "leftTurnLanes": 0,
+        "throughLanes": 2,
+        "rightTurnLanes": 1,
+        "laneGroupDefinitions": {
+          "left": {
+            "enabled": true,
+            "laneCount": 1,
+            "servedMovements": {
+              "left": true,
+              "through": true,
+              "right": false
+            }
+          },
+          "through": {
+            "enabled": true,
+            "laneCount": 1,
+            "servedMovements": {
+              "left": false,
+              "through": true,
+              "right": false
+            }
+          },
+          "right": {
+            "enabled": true,
+            "laneCount": 1,
+            "servedMovements": {
+              "left": false,
+              "through": false,
+              "right": true
+            }
+          }
+        }
+      },
+      "Southbound": {
+        "numberOfLanes": 4,
+        "laneWidth": 3.5,
+        "grade": 0,
+        "storageLength": 35,
+        "exclusiveLeftTurnLane": true,
+        "exclusiveRightTurnLane": true,
+        "parkingAdjacent": false,
+        "busStopNearStopLine": false,
+        "leftTurnLanes": 1,
+        "throughLanes": 2,
+        "rightTurnLanes": 1,
+        "laneGroupDefinitions": {
+          "left": {
+            "enabled": true,
+            "laneCount": 1,
+            "servedMovements": {
+              "left": true,
+              "through": false,
+              "right": false
+            }
+          },
+          "through": {
+            "enabled": true,
+            "laneCount": 2,
+            "servedMovements": {
+              "left": false,
+              "through": true,
+              "right": false
+            }
+          },
+          "right": {
+            "enabled": true,
+            "laneCount": 1,
+            "servedMovements": {
+              "left": false,
+              "through": false,
+              "right": true
+            }
+          }
+        }
+      },
+      "Eastbound": {
+        "numberOfLanes": 2,
+        "laneWidth": 3.5,
+        "grade": 0,
+        "storageLength": 35,
+        "exclusiveLeftTurnLane": true,
+        "exclusiveRightTurnLane": false,
+        "parkingAdjacent": false,
+        "busStopNearStopLine": false,
+        "leftTurnLanes": 1,
+        "throughLanes": 1,
+        "rightTurnLanes": 0,
+        "laneGroupDefinitions": {
+          "left": {
+            "enabled": true,
+            "laneCount": 1,
+            "servedMovements": {
+              "left": true,
+              "through": false,
+              "right": false
+            }
+          },
+          "through": {
+            "enabled": true,
+            "laneCount": 1,
+            "servedMovements": {
+              "left": false,
+              "through": true,
+              "right": true
+            }
+          },
+          "right": {
+            "enabled": false,
+            "laneCount": 0,
+            "servedMovements": {
+              "left": false,
+              "through": false,
+              "right": true
+            }
+          }
+        }
+      },
+      "Westbound": {
+        "numberOfLanes": 2,
+        "laneWidth": 3.5,
+        "grade": 0,
+        "storageLength": 35,
+        "exclusiveLeftTurnLane": false,
+        "exclusiveRightTurnLane": true,
+        "parkingAdjacent": false,
+        "busStopNearStopLine": false,
+        "leftTurnLanes": 0,
+        "throughLanes": 1,
+        "rightTurnLanes": 1,
+        "laneGroupDefinitions": {
+          "left": {
+            "enabled": false,
+            "laneCount": 0,
+            "servedMovements": {
+              "left": true,
+              "through": false,
+              "right": false
+            }
+          },
+          "through": {
+            "enabled": true,
+            "laneCount": 1,
+            "servedMovements": {
+              "left": false,
+              "through": true,
+              "right": false
+            }
+          },
+          "right": {
+            "enabled": true,
+            "laneCount": 1,
+            "servedMovements": {
+              "left": false,
+              "through": false,
+              "right": true
+            }
+          }
+        }
+      }
+    },
+    "numberOfLanes": 3,
+    "laneWidth": 3.5,
+    "grade": 0,
+    "storageLength": 35,
+    "exclusiveLeftTurnLane": false,
+    "exclusiveRightTurnLane": true,
+    "parkingAdjacent": false,
+    "busStopNearStopLine": false,
+    "leftTurnLanes": 0,
+    "throughLanes": 2,
+    "rightTurnLanes": 1,
+    "laneGroupDefinitions": {
+      "left": {
+        "enabled": true,
+        "laneCount": 1,
+        "servedMovements": {
+          "left": true,
+          "through": true,
+          "right": false
+        }
+      },
+      "through": {
+        "enabled": true,
+        "laneCount": 1,
+        "servedMovements": {
+          "left": false,
+          "through": true,
+          "right": false
+        }
+      },
+      "right": {
+        "enabled": true,
+        "laneCount": 1,
+        "servedMovements": {
+          "left": false,
+          "through": false,
+          "right": true
+        }
+      }
+    }
+  },
+  "traffic": {
+    "approachDirection": "Northbound",
+    "approaches": {
+      "Northbound": {
+        "analysisPeriodHours": 0.25,
+        "peakHourFactor": 0.92,
+        "heavyVehiclesPercent": 4,
+        "arrivalType": 3,
+        "leftTurnVolume": 220,
+        "throughVolume": 650,
+        "rightTurnVolume": 110,
+        "pedestrianVolume": 150,
+        "bicycleVolume": 25,
+        "parkingManeuvers": 0,
+        "busesStopping": 0,
+        "rightTurnOnRedPermitted": true,
+        "observedRTORVolume": 18,
+        "laneGroups": {
+          "left": {
+            "leftTurnPhasing": "protected-permitted",
+            "leftTurnProtectedProportion": 0.45,
+            "leftTurnOpposingFlowVehPerHour": 700,
+            "leftTurnPedestrianConflict": 0.2,
+            "rightTurnProtectedProportion": "",
+            "rightTurnPedestrianConflict": "",
+            "initialQueueVehicles": 4
+          },
+          "through": {
+            "leftTurnPhasing": "protected",
+            "leftTurnProtectedProportion": 1,
+            "leftTurnOpposingFlowVehPerHour": "",
+            "leftTurnPedestrianConflict": "",
+            "rightTurnProtectedProportion": "",
+            "rightTurnPedestrianConflict": "",
+            "initialQueueVehicles": 6
+          },
+          "right": {
+            "leftTurnPhasing": "protected",
+            "leftTurnProtectedProportion": 1,
+            "leftTurnOpposingFlowVehPerHour": "",
+            "leftTurnPedestrianConflict": "",
+            "rightTurnProtectedProportion": 0.15,
+            "rightTurnPedestrianConflict": 0.25,
+            "initialQueueVehicles": 2
+          }
+        }
+      },
+      "Southbound": {
+        "analysisPeriodHours": 0.25,
+        "peakHourFactor": 0.95,
+        "heavyVehiclesPercent": 6,
+        "arrivalType": 4,
+        "leftTurnVolume": 90,
+        "throughVolume": 820,
+        "rightTurnVolume": 140,
+        "pedestrianVolume": 90,
+        "bicycleVolume": 10,
+        "parkingManeuvers": 0,
+        "busesStopping": 1,
+        "rightTurnOnRedPermitted": true,
+        "observedRTORVolume": 22,
+        "laneGroups": {
+          "left": {
+            "leftTurnPhasing": "protected",
+            "leftTurnProtectedProportion": 1,
+            "leftTurnOpposingFlowVehPerHour": 650,
+            "leftTurnPedestrianConflict": 0.1,
+            "rightTurnProtectedProportion": "",
+            "rightTurnPedestrianConflict": "",
+            "initialQueueVehicles": 2
+          },
+          "through": {
+            "leftTurnPhasing": "protected",
+            "leftTurnProtectedProportion": 1,
+            "leftTurnOpposingFlowVehPerHour": "",
+            "leftTurnPedestrianConflict": "",
+            "rightTurnProtectedProportion": "",
+            "rightTurnPedestrianConflict": "",
+            "initialQueueVehicles": 7
+          },
+          "right": {
+            "leftTurnPhasing": "protected",
+            "leftTurnProtectedProportion": 1,
+            "leftTurnOpposingFlowVehPerHour": "",
+            "leftTurnPedestrianConflict": "",
+            "rightTurnProtectedProportion": 0.1,
+            "rightTurnPedestrianConflict": 0.15,
+            "initialQueueVehicles": 3
+          }
+        }
+      },
+      "Eastbound": {
+        "analysisPeriodHours": 0.25,
+        "peakHourFactor": 0.9,
+        "heavyVehiclesPercent": 3,
+        "arrivalType": 2,
+        "leftTurnVolume": 150,
+        "throughVolume": 430,
+        "rightTurnVolume": 210,
+        "pedestrianVolume": 220,
+        "bicycleVolume": 30,
+        "parkingManeuvers": 2,
+        "busesStopping": 0,
+        "rightTurnOnRedPermitted": true,
+        "observedRTORVolume": 35,
+        "laneGroups": {
+          "left": {
+            "leftTurnPhasing": "permitted",
+            "leftTurnProtectedProportion": 0,
+            "leftTurnOpposingFlowVehPerHour": 300,
+            "leftTurnPedestrianConflict": 0.35,
+            "rightTurnProtectedProportion": "",
+            "rightTurnPedestrianConflict": "",
+            "initialQueueVehicles": 3
+          },
+          "through": {
+            "leftTurnPhasing": "protected",
+            "leftTurnProtectedProportion": 1,
+            "leftTurnOpposingFlowVehPerHour": "",
+            "leftTurnPedestrianConflict": "",
+            "rightTurnProtectedProportion": 0.2,
+            "rightTurnPedestrianConflict": 0.3,
+            "initialQueueVehicles": 5
+          },
+          "right": {
+            "leftTurnPhasing": "protected",
+            "leftTurnProtectedProportion": 1,
+            "leftTurnOpposingFlowVehPerHour": "",
+            "leftTurnPedestrianConflict": "",
+            "rightTurnProtectedProportion": "",
+            "rightTurnPedestrianConflict": "",
+            "initialQueueVehicles": ""
+          }
+        }
+      },
+      "Westbound": {
+        "analysisPeriodHours": 0.25,
+        "peakHourFactor": 0.96,
+        "heavyVehiclesPercent": 2,
+        "arrivalType": 5,
+        "leftTurnVolume": 40,
+        "throughVolume": 300,
+        "rightTurnVolume": 120,
+        "pedestrianVolume": 60,
+        "bicycleVolume": 5,
+        "parkingManeuvers": 0,
+        "busesStopping": 0,
+        "rightTurnOnRedPermitted": true,
+        "observedRTORVolume": 10,
+        "laneGroups": {
+          "left": {
+            "leftTurnPhasing": "protected",
+            "leftTurnProtectedProportion": 1,
+            "leftTurnOpposingFlowVehPerHour": "",
+            "leftTurnPedestrianConflict": "",
+            "rightTurnProtectedProportion": "",
+            "rightTurnPedestrianConflict": "",
+            "initialQueueVehicles": ""
+          },
+          "through": {
+            "leftTurnPhasing": "protected",
+            "leftTurnProtectedProportion": 1,
+            "leftTurnOpposingFlowVehPerHour": "",
+            "leftTurnPedestrianConflict": "",
+            "rightTurnProtectedProportion": "",
+            "rightTurnPedestrianConflict": "",
+            "initialQueueVehicles": 3
+          },
+          "right": {
+            "leftTurnPhasing": "protected",
+            "leftTurnProtectedProportion": 1,
+            "leftTurnOpposingFlowVehPerHour": "",
+            "leftTurnPedestrianConflict": "",
+            "rightTurnProtectedProportion": 0.05,
+            "rightTurnPedestrianConflict": 0.1,
+            "initialQueueVehicles": 1
+          }
+        }
+      }
+    },
+    "analysisPeriodHours": 0.25,
+    "peakHourFactor": 0.92,
+    "heavyVehiclesPercent": 4,
+    "arrivalType": 3,
+    "leftTurnVolume": 220,
+    "throughVolume": 650,
+    "rightTurnVolume": 110,
+    "pedestrianVolume": 150,
+    "bicycleVolume": 25,
+    "parkingManeuvers": 0,
+    "busesStopping": 0,
+    "rightTurnOnRedPermitted": true,
+    "observedRTORVolume": 18
+  },
+  "signal": {
+    "controlType": "Pretimed",
+    "numberOfPhases": 2,
+    "pedestrianPushButtonEnabled": false,
+    "cycleLength": 100,
+    "analysisPeriodHours": 0.25,
+    "minimumPedestrianGreen": 7,
+    "phases": [
+      {
+        "phaseNumber": 1,
+        "greenTime": 48,
+        "yellowAllRed": 4,
+        "protectedMovements": "NB LT/TH/RT, SB LT/TH/RT",
+        "movementPermissions": {
+          "Northbound": {
+            "left": true,
+            "through": true,
+            "right": true
+          },
+          "Southbound": {
+            "left": true,
+            "through": true,
+            "right": true
+          },
+          "Eastbound": {
+            "left": false,
+            "through": false,
+            "right": false
+          },
+          "Westbound": {
+            "left": false,
+            "through": false,
+            "right": false
+          }
+        }
+      },
+      {
+        "phaseNumber": 2,
+        "greenTime": 44,
+        "yellowAllRed": 4,
+        "protectedMovements": "EB LT/TH/RT, WB LT/TH/RT",
+        "movementPermissions": {
+          "Northbound": {
+            "left": false,
+            "through": false,
+            "right": false
+          },
+          "Southbound": {
+            "left": false,
+            "through": false,
+            "right": false
+          },
+          "Eastbound": {
+            "left": true,
+            "through": true,
+            "right": true
+          },
+          "Westbound": {
+            "left": true,
+            "through": true,
+            "right": true
+          }
+        }
+      }
+    ],
+    "notes": "Sample imported scenario for testing JSON import, HCM-oriented analysis, simulation, and comparison."
+  },
+  "results": null
+}
