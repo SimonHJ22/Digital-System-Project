@@ -24,11 +24,40 @@ function getMovementLabel(movement: LaneGroupKey): string {
 export default function SignalPage() {
   const { scenario, updateSignal, resetSignal } = useScenario();
   const signal = scenario.signal;
-
-  const phases = useMemo(
-    () => ensurePhaseTimingCount(signal.phases, signal.numberOfPhases),
-    [signal.phases, signal.numberOfPhases]
+  const activeApproaches = APPROACH_DIRECTIONS.filter(
+    (approach) => scenario.geometry.approaches[approach].numberOfLanes > 0
   );
+
+  const visibleApproaches =
+    activeApproaches.length > 0 ? activeApproaches : APPROACH_DIRECTIONS;
+
+
+  const phases = useMemo(() => {
+    const normalized = ensurePhaseTimingCount(signal.phases, signal.numberOfPhases);
+
+    return normalized.map((phase) => {
+      const movementPermissions = {
+        ...phase.movementPermissions,
+      };
+
+      APPROACH_DIRECTIONS.forEach((approach) => {
+        if (!visibleApproaches.includes(approach)) {
+          movementPermissions[approach] = {
+            left: false,
+            through: false,
+            right: false,
+          };
+        }
+      });
+
+      return {
+        ...phase,
+        movementPermissions,
+        protectedMovements: formatPhaseMovementSummary(movementPermissions),
+      };
+    });
+  }, [signal.phases, signal.numberOfPhases, visibleApproaches]);
+
 
   const phasesNeedNormalization =
     signal.phases.length !== phases.length ||
@@ -297,7 +326,7 @@ export default function SignalPage() {
                   ))}
                 </div>
 
-                {APPROACH_DIRECTIONS.map((approach) => (
+                {visibleApproaches.map((approach) => (
                   <div
                     key={approach}
                     className="grid grid-cols-4 border-t border-slate-200 text-sm"

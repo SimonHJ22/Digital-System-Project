@@ -90,9 +90,16 @@ function createDefaultLaneGroupInput(): LaneGroupInputSettings {
     leftTurnPedestrianConflict: "",
     rightTurnProtectedProportion: "",
     rightTurnPedestrianConflict: "",
+    leftTurnFactorOverride: "",
+    rightTurnFactorOverride: "",
+    leftTurnPedestrianFactorOverride: "",
+    rightTurnPedestrianFactorOverride: "",
+    saturationFlowOverrideVehPerHour: "",
     initialQueueVehicles: "",
   };
 }
+
+
 
 function createDefaultLaneGroupInputMap(): LaneGroupInputMap {
   return {

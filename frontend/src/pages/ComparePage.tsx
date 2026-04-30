@@ -1,7 +1,8 @@
 import { useMemo, useState } from "react";
 import { useScenario } from "../features/scenario/useScenario";
 import { generateMockResults } from "../utils/mockAnalysis";
-import type { ResultsData, ScenarioData } from "../types/traffic";
+import type { ApproachDirection, ResultsData, ScenarioData } from "../types/traffic";
+
 
 const BASELINE_STORAGE_KEY = "ui_simulation_compare_baseline";
 
@@ -25,6 +26,40 @@ type ApproachComparisonRow = {
   baselineLOS: string;
   proposedLOS: string;
 };
+
+const ALL_APPROACHES: ApproachDirection[] = [
+  "Northbound",
+  "Southbound",
+  "Eastbound",
+  "Westbound",
+];
+
+function getActiveApproaches(scenario: ScenarioData): ApproachDirection[] {
+  const activeApproaches = ALL_APPROACHES.filter(
+    (approach) => scenario.geometry.approaches[approach].numberOfLanes > 0
+  );
+
+  return activeApproaches.length > 0 ? activeApproaches : ALL_APPROACHES;
+}
+
+function getComparisonApproaches(
+  baselineScenario: ScenarioData | null,
+  proposedScenario: ScenarioData
+): ApproachDirection[] {
+  const proposedActive = getActiveApproaches(proposedScenario);
+
+  if (!baselineScenario) {
+    return proposedActive;
+  }
+
+  const baselineActive = getActiveApproaches(baselineScenario);
+
+  return ALL_APPROACHES.filter(
+    (approach) =>
+      baselineActive.includes(approach) || proposedActive.includes(approach)
+  );
+}
+
 
 function cloneScenario(scenario: ScenarioData): ScenarioData {
   return JSON.parse(JSON.stringify(scenario)) as ScenarioData;
@@ -200,10 +235,11 @@ function buildComparisonRows(
 
 function buildApproachRows(
   baselineResults: ResultsData | null,
-  proposedResults: ResultsData | null
+  proposedResults: ResultsData | null,
+  visibleApproaches: ApproachDirection[]
 ): ApproachComparisonRow[] {
   if (!baselineResults || !proposedResults) {
-    return ["Northbound", "Southbound", "Eastbound", "Westbound"].map((approach) => ({
+    return visibleApproaches.map((approach) => ({
       approach,
       baselineDelay: "--",
       proposedDelay: "--",
@@ -212,21 +248,27 @@ function buildApproachRows(
     }));
   }
 
-  return proposedResults.approachResults.map((proposedRow) => {
+  return visibleApproaches.map((approach) => {
+    const proposedRow =
+      proposedResults.approachResults.find(
+        (candidate) => candidate.approach === approach
+      ) ?? null;
+
     const baselineRow =
       baselineResults.approachResults.find(
-        (candidate) => candidate.approach === proposedRow.approach
+        (candidate) => candidate.approach === approach
       ) ?? null;
 
     return {
-      approach: proposedRow.approach,
+      approach,
       baselineDelay: baselineRow?.delay ?? "--",
-      proposedDelay: proposedRow.delay,
+      proposedDelay: proposedRow?.delay ?? "--",
       baselineLOS: baselineRow?.los ?? "--",
-      proposedLOS: proposedRow.los,
+      proposedLOS: proposedRow?.los ?? "--",
     };
   });
 }
+
 
 function getImpactBadgeClasses(impact: ComparisonRow["impact"]): string {
   if (impact === "Improved") {
@@ -302,6 +344,11 @@ export default function ComparePage() {
   const [baselineSnapshot, setBaselineSnapshot] = useState<StoredBaseline | null>(
     () => loadStoredBaseline()
   );
+  const visibleApproaches = useMemo(
+    () => getComparisonApproaches(baselineSnapshot?.scenario ?? null, scenario),
+    [baselineSnapshot, scenario]
+  );
+
 
   const baselineResults = useMemo(
     () =>
@@ -314,9 +361,15 @@ export default function ComparePage() {
     [baselineResults, baselineSnapshot, proposedResults]
   );
   const approachRows = useMemo(
-    () => buildApproachRows(baselineResults, baselineSnapshot ? proposedResults : null),
-    [baselineResults, baselineSnapshot, proposedResults]
+    () =>
+      buildApproachRows(
+        baselineResults,
+        baselineSnapshot ? proposedResults : null,
+        visibleApproaches
+      ),
+    [baselineResults, baselineSnapshot, proposedResults, visibleApproaches]
   );
+
   const recommendationLines = useMemo(
     () => buildRecommendationLines(comparisonRows),
     [comparisonRows]

@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useScenario } from "../features/scenario/useScenario";
 import type {
   ApproachDirection,
@@ -10,18 +11,40 @@ export default function TrafficPage() {
   const { scenario, updateTraffic, updateTrafficLaneGroup, resetTraffic } = useScenario();
   const traffic = scenario.traffic;
   const geometry = scenario.geometry;
-  const approachCards = (Object.entries(traffic.approaches) as Array<
-    [ApproachDirection, (typeof traffic.approaches)[ApproachDirection]]
-  >).map(([direction, data]) => ({
-    direction,
-    totalVolume:
-      Number(data.leftTurnVolume || 0) +
-      Number(data.throughVolume || 0) +
-      Number(data.rightTurnVolume || 0),
-    movements: `L ${Number(data.leftTurnVolume || 0)} / T ${Number(
-      data.throughVolume || 0
-    )} / R ${Number(data.rightTurnVolume || 0)}`,
-  }));
+    const allApproaches: ApproachDirection[] = [
+    "Northbound",
+    "Southbound",
+    "Eastbound",
+    "Westbound",
+  ];
+
+  const activeApproaches = allApproaches.filter(
+    (direction) => geometry.approaches[direction].numberOfLanes > 0
+  );
+
+  const visibleApproaches =
+    activeApproaches.length > 0 ? activeApproaches : allApproaches;
+  useEffect(() => {
+    if (!visibleApproaches.includes(traffic.approachDirection)) {
+      updateTraffic({ approachDirection: visibleApproaches[0] });
+    }
+  }, [traffic.approachDirection, updateTraffic, visibleApproaches]);
+
+  const approachCards = visibleApproaches.map((direction) => {
+    const data = traffic.approaches[direction];
+
+    return {
+      direction,
+      totalVolume:
+        Number(data.leftTurnVolume || 0) +
+        Number(data.throughVolume || 0) +
+        Number(data.rightTurnVolume || 0),
+      movements: `L ${Number(data.leftTurnVolume || 0)} / T ${Number(
+        data.throughVolume || 0
+      )} / R ${Number(data.rightTurnVolume || 0)}`,
+    };
+  });
+
   const activeLaneGroups = (Object.entries(geometry.laneGroupDefinitions) as Array<
     [LaneGroupKey, (typeof geometry.laneGroupDefinitions)[LaneGroupKey]]
   >)
@@ -71,10 +94,12 @@ export default function TrafficPage() {
               }
               className="w-full rounded-xl border border-slate-300 px-4 py-2 outline-none focus:ring-2 focus:ring-blue-500"
             >
-              <option value="Northbound">Northbound</option>
-              <option value="Southbound">Southbound</option>
-              <option value="Eastbound">Eastbound</option>
-              <option value="Westbound">Westbound</option>
+              {visibleApproaches.map((approach) => (
+                <option key={approach} value={approach}>
+                  {approach}
+                </option>
+              ))}
+
             </select>
           </div>
 
@@ -529,6 +554,127 @@ export default function TrafficPage() {
                     </div>
                   ) : null}
                 </div>
+                <div className="border-t border-slate-200 pt-4">
+                  <p className="text-sm font-medium text-slate-700 mb-3">
+                    Advanced HCM Factor Overrides (optional)
+                  </p>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-slate-700 mb-1">
+                        Sat Flow Override (veh/h)
+                      </label>
+                      <input
+                        type="number"
+                        min="100"
+                        max="10000"
+                        step="1"
+                        placeholder="Leave blank"
+                        value={laneGroup.saturationFlowOverrideVehPerHour}
+                        onChange={(e) =>
+                          updateTrafficLaneGroup(group.key, {
+                            saturationFlowOverrideVehPerHour:
+                              e.target.value === "" ? "" : Number(e.target.value),
+                          })
+                        }
+                        className="w-full rounded-xl border border-slate-300 px-4 py-2 outline-none focus:ring-2 focus:ring-blue-500"
+                      />
+                    </div>
+
+                    {servesLeft ? (
+                      <div>
+                        <label className="block text-sm font-medium text-slate-700 mb-1">
+                          LT Factor Override
+                        </label>
+                        <input
+                          type="number"
+                          min="0.05"
+                          max="1.5"
+                          step="0.01"
+                          placeholder="Leave blank"
+                          value={laneGroup.leftTurnFactorOverride}
+                          onChange={(e) =>
+                            updateTrafficLaneGroup(group.key, {
+                              leftTurnFactorOverride:
+                                e.target.value === "" ? "" : Number(e.target.value),
+                            })
+                          }
+                          className="w-full rounded-xl border border-slate-300 px-4 py-2 outline-none focus:ring-2 focus:ring-blue-500"
+                        />
+                      </div>
+                    ) : null}
+
+                    {servesRight ? (
+                      <div>
+                        <label className="block text-sm font-medium text-slate-700 mb-1">
+                          RT Factor Override
+                        </label>
+                        <input
+                          type="number"
+                          min="0.05"
+                          max="1.5"
+                          step="0.01"
+                          placeholder="Leave blank"
+                          value={laneGroup.rightTurnFactorOverride}
+                          onChange={(e) =>
+                            updateTrafficLaneGroup(group.key, {
+                              rightTurnFactorOverride:
+                                e.target.value === "" ? "" : Number(e.target.value),
+                            })
+                          }
+                          className="w-full rounded-xl border border-slate-300 px-4 py-2 outline-none focus:ring-2 focus:ring-blue-500"
+                        />
+                      </div>
+                    ) : null}
+
+                    {servesLeft ? (
+                      <div>
+                        <label className="block text-sm font-medium text-slate-700 mb-1">
+                          LT Ped Factor Override
+                        </label>
+                        <input
+                          type="number"
+                          min="0.05"
+                          max="1.5"
+                          step="0.01"
+                          placeholder="Leave blank"
+                          value={laneGroup.leftTurnPedestrianFactorOverride}
+                          onChange={(e) =>
+                            updateTrafficLaneGroup(group.key, {
+                              leftTurnPedestrianFactorOverride:
+                                e.target.value === "" ? "" : Number(e.target.value),
+                            })
+                          }
+                          className="w-full rounded-xl border border-slate-300 px-4 py-2 outline-none focus:ring-2 focus:ring-blue-500"
+                        />
+                      </div>
+                    ) : null}
+
+                    {servesRight ? (
+                      <div>
+                        <label className="block text-sm font-medium text-slate-700 mb-1">
+                          RT Ped Factor Override
+                        </label>
+                        <input
+                          type="number"
+                          min="0.05"
+                          max="1.5"
+                          step="0.01"
+                          placeholder="Leave blank"
+                          value={laneGroup.rightTurnPedestrianFactorOverride}
+                          onChange={(e) =>
+                            updateTrafficLaneGroup(group.key, {
+                              rightTurnPedestrianFactorOverride:
+                                e.target.value === "" ? "" : Number(e.target.value),
+                            })
+                          }
+                          className="w-full rounded-xl border border-slate-300 px-4 py-2 outline-none focus:ring-2 focus:ring-blue-500"
+                        />
+                      </div>
+                    ) : null}
+                  </div>
+                </div>
+
               </div>
             );
           })}

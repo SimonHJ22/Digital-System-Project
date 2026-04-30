@@ -17,7 +17,9 @@ import type {
   SignalPhase,
   SaturationFlowAdjustmentFactors,
 } from "./models";
-import { analyzeApproach, analyzeLaneGroups } from "./engine/analysis";
+import { analyzeLaneGroups } from "./engine/analysis";
+import { getLosFromDelay } from "./engine/los";
+
 
 type AdapterOutput = {
   intersection: Intersection;
@@ -178,24 +180,8 @@ function createApproachLanesAndGroups(
         definition.enabled && definition.laneCount > 0 && servedMovements.length > 0
     );
 
-  const activeGroups =
-    configuredGroups.length > 0
-      ? configuredGroups
-      : [
-          {
-            groupKey: "through" as const,
-            definition: {
-              enabled: true,
-              laneCount: 1,
-              servedMovements: {
-                left: false,
-                through: true,
-                right: false,
-              },
-            },
-            servedMovements: ["through"] as MovementType[],
-          },
-        ];
+  const activeGroups = configuredGroups;
+
 
   activeGroups.forEach(({ groupKey, definition, servedMovements }) => {
     const groupInputs = laneGroupInputs[groupKey];
@@ -203,11 +189,42 @@ function createApproachLanesAndGroups(
       addLane(servedMovements)
     );
 
+    const saturationFlowFactorOverrides = {
+      leftTurnFactor:
+        typeof groupInputs.leftTurnFactorOverride === "number"
+          ? clamp(groupInputs.leftTurnFactorOverride, 0.05, 1.5)
+          : undefined,
+      rightTurnFactor:
+        typeof groupInputs.rightTurnFactorOverride === "number"
+          ? clamp(groupInputs.rightTurnFactorOverride, 0.05, 1.5)
+          : undefined,
+      leftTurnPedestrianFactor:
+        typeof groupInputs.leftTurnPedestrianFactorOverride === "number"
+          ? clamp(groupInputs.leftTurnPedestrianFactorOverride, 0.05, 1.5)
+          : undefined,
+      rightTurnPedestrianFactor:
+        typeof groupInputs.rightTurnPedestrianFactorOverride === "number"
+          ? clamp(groupInputs.rightTurnPedestrianFactorOverride, 0.05, 1.5)
+          : undefined,
+    };
+
+    const hasSaturationFlowOverrides = Object.values(
+      saturationFlowFactorOverrides
+    ).some((value) => typeof value === "number");
+
     laneGroups.push({
       id: `${approachId}_lg_${groupKey}`,
       laneIds,
       servedMovements,
+      saturationFlowFactorOverrides: hasSaturationFlowOverrides
+        ? saturationFlowFactorOverrides
+        : undefined,
+      saturationFlowOverrideVehPerHour:
+        typeof groupInputs.saturationFlowOverrideVehPerHour === "number"
+          ? clamp(groupInputs.saturationFlowOverrideVehPerHour, 100, 10000)
+          : undefined,
       leftTurnPhasing: servedMovements.includes("left")
+
         ? groupInputs.leftTurnPhasing
         : undefined,
       leftTurnProtectedProportion: servedMovements.includes("left")
@@ -244,13 +261,38 @@ export function buildHcmIntersectionFromScenario(scenario: ScenarioData): Adapte
       typeof geometryForApproach.laneWidth === "number" && geometryForApproach.laneWidth > 0
         ? geometryForApproach.laneWidth
         : 3.6;
-    const leftTurnVolume = Math.max(0, Number(trafficForApproach.leftTurnVolume || 0));
-    const throughVolume = Math.max(0, Number(trafficForApproach.throughVolume || 0));
-    const rightTurnVolume = Math.max(0, Number(trafficForApproach.rightTurnVolume || 0));
+    const rawLeftTurnVolume = Math.max(
+      0,
+      Number(trafficForApproach.leftTurnVolume || 0)
+    );
+    const rawThroughVolume = Math.max(
+      0,
+      Number(trafficForApproach.throughVolume || 0)
+    );
+    const rawRightTurnVolume = Math.max(
+      0,
+      Number(trafficForApproach.rightTurnVolume || 0)
+    );
     const peakHourFactor =
-      typeof trafficForApproach.peakHourFactor === "number" && trafficForApproach.peakHourFactor > 0
+      typeof trafficForApproach.peakHourFactor === "number" &&
+      trafficForApproach.peakHourFactor > 0
         ? trafficForApproach.peakHourFactor
         : 0.92;
+    // If RTOR is permitted, remove the observed RTOR volume from the approach
+    // right-turn demand before building the HCM lane-group counts.
+    const observedRtorVolume =
+      trafficForApproach.rightTurnOnRedPermitted &&
+      typeof trafficForApproach.observedRTORVolume === "number"
+        ? clamp(trafficForApproach.observedRTORVolume, 0, rawRightTurnVolume)
+        : 0;
+
+    const leftTurnVolume = rawLeftTurnVolume;
+    const throughVolume = rawThroughVolume;
+    const rightTurnVolume = Math.max(
+      0,
+      rawRightTurnVolume - observedRtorVolume
+    );
+
     const heavyVehiclesPercent = clamp(
       Number(trafficForApproach.heavyVehiclesPercent || 0),
       0,
@@ -313,10 +355,11 @@ export function buildHcmIntersectionFromScenario(scenario: ScenarioData): Adapte
               const direction = approachDirection.replace("bound", "").toLowerCase();
               return `${direction}_approach`;
             });
-            const greenSeconds =
-              typeof phase.greenTime === "number" && phase.greenTime > 0
-                ? phase.greenTime
-                : Math.max(10, Math.round(cycleLength / Math.max(1, scenario.signal.numberOfPhases)));
+            const greenSeconds = getConfiguredGreenSeconds(
+              phase,
+              cycleLength,
+              scenario.signal.numberOfPhases
+            );
             const yellowAllRed =
               typeof phase.yellowAllRed === "number" && phase.yellowAllRed >= 0
                 ? phase.yellowAllRed
@@ -328,6 +371,8 @@ export function buildHcmIntersectionFromScenario(scenario: ScenarioData): Adapte
               greenSeconds,
               yellowSeconds: Math.min(4, yellowAllRed),
               allRedSeconds: Math.max(0, yellowAllRed - Math.min(4, yellowAllRed)),
+              effectiveGreenSeconds: greenSeconds,
+
               queueSignalType,
               progressionAdjustmentFactor: getProgressionAdjustmentFactor(
                 scenario.traffic.approaches.Northbound.arrivalType
@@ -351,6 +396,8 @@ export function buildHcmIntersectionFromScenario(scenario: ScenarioData): Adapte
             greenSeconds: Math.max(10, Math.round(cycleLength / 2)),
             yellowSeconds: 3,
             allRedSeconds: 1,
+            effectiveGreenSeconds: Math.max(10, Math.round(cycleLength / 2)),
+
             queueSignalType,
             progressionAdjustmentFactor: getProgressionAdjustmentFactor(
               scenario.traffic.approaches.Northbound.arrivalType
@@ -382,12 +429,6 @@ export function buildHcmIntersectionFromScenario(scenario: ScenarioData): Adapte
   };
 }
 
-function getPhaseForApproach(intersection: Intersection, approachId: string): SignalPhase {
-  return (
-    intersection.phases.find((phase) => phase.servedApproaches.includes(approachId)) ??
-    intersection.phases[0]
-  );
-}
 
 function formatMovementLabel(servedMovements: string[]): string {
   return servedMovements
@@ -395,15 +436,218 @@ function formatMovementLabel(servedMovements: string[]): string {
     .join("/");
 }
 
+function getConfiguredGreenSeconds(
+  phase: ScenarioData["signal"]["phases"][number],
+  cycleLength: number,
+  phaseCount: number
+): number {
+  return typeof phase.greenTime === "number" && phase.greenTime > 0
+    ? phase.greenTime
+    : Math.max(10, Math.round(cycleLength / Math.max(1, phaseCount)));
+}
+
+function doesPhaseServeLaneGroup(
+  phase: ScenarioData["signal"]["phases"][number],
+  approachDirection: ApproachDirection,
+  laneGroup: LaneGroup
+): boolean {
+  return laneGroup.servedMovements.some((movement) =>
+    Boolean(phase.movementPermissions[approachDirection][movement])
+  );
+}
+
+function buildLaneGroupSignalPhase(
+  scenario: ScenarioData,
+  intersection: Intersection,
+  approach: Approach,
+  laneGroup: LaneGroup
+): SignalPhase {
+  const approachDirection = toApproachDirection(approach.direction);
+  const normalizedSignalPhases = ensurePhaseTimingCount(
+    scenario.signal.phases,
+    scenario.signal.numberOfPhases
+  );
+
+  // Lane groups can be served in more than one phase, so effective service is
+  // built from the phases whose movement permissions include that lane group.
+  const matchingPhases = normalizedSignalPhases.filter((phase) =>
+    doesPhaseServeLaneGroup(phase, approachDirection, laneGroup)
+  );
+
+  const totalGreenSeconds = matchingPhases.reduce(
+    (sum, phase) =>
+      sum +
+      getConfiguredGreenSeconds(
+        phase,
+        intersection.cycleLength,
+        scenario.signal.numberOfPhases
+      ),
+    0
+  );
+
+  const fallbackGreenSeconds = Math.max(
+    10,
+    Math.round(
+      intersection.cycleLength / Math.max(1, scenario.signal.numberOfPhases)
+    )
+  );
+
+  const effectiveGreenSeconds =
+    totalGreenSeconds > 0 ? totalGreenSeconds : fallbackGreenSeconds;
+
+  return {
+    id: `${laneGroup.id}_phase`,
+    name: `Phase service for ${laneGroup.id}`,
+    greenSeconds: effectiveGreenSeconds,
+    yellowSeconds: 0,
+    allRedSeconds: 0,
+    effectiveGreenSeconds,
+    queueSignalType:
+      scenario.signal.controlType === "Actuated" ||
+      scenario.signal.controlType === "Semiactuated"
+        ? "actuated"
+        : "pretimed",
+    progressionAdjustmentFactor: getProgressionAdjustmentFactor(
+      scenario.traffic.approaches[approachDirection].arrivalType
+    ),
+    incrementalDelayAnalysisPeriodHours:
+      scenario.signal.analysisPeriodHours ||
+      scenario.traffic.approaches[approachDirection].analysisPeriodHours ||
+      1,
+    incrementalDelayKFactor: 0.5,
+    upstreamFilteringFactor: 1,
+    servedApproaches: [approach.id],
+  };
+}
+
+type LaneGroupCriticalEntry = {
+  approach: Approach;
+  laneGroup: {
+    adjustedVolume: number;
+    saturationFlow: number;
+  };
+};
+
+function getCriticalFlowGroupKey(direction: Direction): "ns" | "ew" {
+  return direction === "north" || direction === "south" ? "ns" : "ew";
+}
+
+function calculateIntersectionCriticalVCRatio(
+  scenario: ScenarioData,
+  laneGroupEntries: LaneGroupCriticalEntry[],
+  cycleLength: number
+): number {
+  if (laneGroupEntries.length === 0 || cycleLength <= 0) {
+    return 0;
+  }
+
+  // Approximate the intersection critical v/c ratio from the highest lane-group
+  // flow ratio in each major corridor family, then normalize by effective cycle.
+  const criticalFlowRatiosByGroup = new Map<"ns" | "ew", number>();
+
+  laneGroupEntries.forEach(({ approach, laneGroup }) => {
+    if (!Number.isFinite(laneGroup.saturationFlow) || laneGroup.saturationFlow <= 0) {
+      return;
+    }
+
+    const flowRatio = laneGroup.adjustedVolume / laneGroup.saturationFlow;
+    const groupKey = getCriticalFlowGroupKey(approach.direction);
+
+    criticalFlowRatiosByGroup.set(
+      groupKey,
+      Math.max(criticalFlowRatiosByGroup.get(groupKey) ?? 0, flowRatio)
+    );
+  });
+
+  const criticalFlowRatioSum = Array.from(
+    criticalFlowRatiosByGroup.values()
+  ).reduce((sum, ratio) => sum + ratio, 0);
+
+  const normalizedSignalPhases = ensurePhaseTimingCount(
+    scenario.signal.phases,
+    scenario.signal.numberOfPhases
+  );
+
+  const totalClearanceLostTime = normalizedSignalPhases.reduce((sum, phase) => {
+    const yellowAllRed =
+      typeof phase.yellowAllRed === "number" && phase.yellowAllRed >= 0
+        ? phase.yellowAllRed
+        : 4;
+
+    return sum + yellowAllRed;
+  }, 0);
+
+  const startupLostTimeSeconds = criticalFlowRatiosByGroup.size * 2;
+
+  const effectiveCycleRatio = Math.max(
+    0.05,
+    1 - (totalClearanceLostTime + startupLostTimeSeconds) / cycleLength
+  );
+
+  return criticalFlowRatioSum / effectiveCycleRatio;
+}
+
+
+
+function isAnalyzableApproach(approach: Approach): boolean {
+  return approach.lanes.length > 0 && approach.laneGroups.length > 0;
+}
+
+
 export function runHcmAnalysisForScenario(scenario: ScenarioData): ResultsData {
   const { intersection, assumptions } = buildHcmIntersectionFromScenario(scenario);
 
-  const approachResults = intersection.approaches.map((approach) => {
-    const phase = getPhaseForApproach(intersection, approach.id);
+  const analyzableApproaches = intersection.approaches.filter(isAnalyzableApproach);
+
+  const approachResults = analyzableApproaches.map((approach) => {
+    const laneGroups = approach.laneGroups.map((laneGroup) => {
+      const laneGroupPhase = buildLaneGroupSignalPhase(
+        scenario,
+        intersection,
+        approach,
+        laneGroup
+      );
+      const laneGroupResults = analyzeLaneGroups(
+        approach,
+        laneGroupPhase,
+        intersection.cycleLength
+      );
+
+      return (
+        laneGroupResults.find(
+          (candidate) => candidate.laneGroupId === laneGroup.id
+        ) ?? laneGroupResults[0]
+      );
+    });
+
+    const adjustedVolume = laneGroups.reduce(
+      (sum, laneGroup) => sum + laneGroup.adjustedVolume,
+      0
+    );
+
+    const controlDelay =
+      adjustedVolume > 0
+        ? laneGroups.reduce(
+            (sum, laneGroup) =>
+              sum + laneGroup.controlDelay * laneGroup.adjustedVolume,
+            0
+          ) / adjustedVolume
+        : 0;
+
+    const percentile95Queue = Math.max(
+      ...laneGroups.map((laneGroup) => laneGroup.percentile95Queue),
+      0
+    );
+
     return {
       approach,
-      result: analyzeApproach(approach, phase, intersection.cycleLength),
-      laneGroups: analyzeLaneGroups(approach, phase, intersection.cycleLength),
+      result: {
+        controlDelay,
+        los: getLosFromDelay(controlDelay),
+        adjustedVolume,
+        percentile95Queue,
+      },
+      laneGroups,
     };
   });
 
@@ -417,16 +661,33 @@ export function runHcmAnalysisForScenario(scenario: ScenarioData): ResultsData {
   const worstApproach = approachResults.reduce((worst, current) =>
     current.result.controlDelay > worst.result.controlDelay ? current : worst
   );
-  const worstLaneGroup = allLaneGroups.reduce((worst, current) =>
-    current.laneGroup.volumeToCapacityRatio > worst.laneGroup.volumeToCapacityRatio ? current : worst
+
+  const criticalVCRatio = calculateIntersectionCriticalVCRatio(
+    scenario,
+    allLaneGroups,
+    intersection.cycleLength
   );
-  const averageDelay =
-    approachResults.reduce((sum, entry) => sum + entry.result.controlDelay, 0) /
-    Math.max(approachResults.length, 1);
-  const maxQueue = Math.max(
-    ...approachResults.map((entry) => entry.result.percentile95Queue),
+
+
+  const totalAdjustedVolume = approachResults.reduce(
+    (sum, entry) => sum + entry.result.adjustedVolume,
     0
   );
+
+  const averageDelay =
+    totalAdjustedVolume > 0
+      ? approachResults.reduce(
+          (sum, entry) =>
+            sum + entry.result.controlDelay * entry.result.adjustedVolume,
+          0
+        ) / totalAdjustedVolume
+      : 0;
+
+  const maxQueue = Math.max(
+    ...allLaneGroups.map((entry) => entry.laneGroup.percentile95Queue),
+    0
+  );
+
 
   return {
     scenarioName: scenario.scenarioName,
@@ -438,8 +699,9 @@ export function runHcmAnalysisForScenario(scenario: ScenarioData): ResultsData {
       levelOfService: worstApproach.result.los,
       progressionFactor: `${(worstApproach.approach.progressionAdjustmentFactor ?? 1).toFixed(2)}`,
       maxBackOfQueue: `${Math.round(maxQueue)} veh`,
-      criticalVCRatio: worstLaneGroup.laneGroup.volumeToCapacityRatio.toFixed(2),
-      analysisStatus: `HCM-Oriented Run (${assumptions.length} adapter assumptions)`,
+      criticalVCRatio: criticalVCRatio.toFixed(2),
+      analysisStatus: `HCM-Oriented Run (${assumptions.length} adapter notes)`,
+
     },
     laneGroupResults: allLaneGroups.map(({ approach, laneGroup }) => ({
       laneGroup: `${getDirectionShortLabel(approach.direction)} ${formatMovementLabel(

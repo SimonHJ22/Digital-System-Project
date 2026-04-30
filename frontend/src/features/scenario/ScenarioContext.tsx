@@ -171,13 +171,14 @@ function syncLegacyGeometryFromLaneGroups(
 
   return {
     ...settings,
-    numberOfLanes: Math.max(numberOfLanes, 1),
+    numberOfLanes,
     leftTurnLanes,
-    throughLanes: Math.max(throughLanes, activeDefinitions.length > 0 ? 0 : 1),
+    throughLanes,
     rightTurnLanes,
     exclusiveLeftTurnLane: leftTurnLanes > 0,
     exclusiveRightTurnLane: rightTurnLanes > 0,
   };
+
 }
 
 function getGeometrySharedPatch(data: Partial<GeometryData>): Partial<GeometryData> {

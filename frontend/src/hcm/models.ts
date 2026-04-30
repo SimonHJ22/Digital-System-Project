@@ -36,8 +36,10 @@ export interface LaneGroup {
       | "rightTurnPedestrianFactor"
     >
   >;
+  saturationFlowOverrideVehPerHour?: number;
   initialQueueVehicles?: number;
 }
+
 
 export interface FifteenMinuteCount {
   interval1: number;

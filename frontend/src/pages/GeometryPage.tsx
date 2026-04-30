@@ -90,6 +90,14 @@ export default function GeometryPage() {
               <option value={4}>4</option>
               <option value={3}>3</option>
             </select>
+            {geometry.numberOfApproaches === 3 ? (
+              <p className="mt-1 text-xs text-amber-600">
+                For a 3-leg T test, choose one approach and disable all three lane-group
+                slots on that approach. Also remove impossible turn movements and phase
+                service for the closed arm.
+              </p>
+            ) : null}
+
           </div>
         </section>
 
@@ -383,9 +391,11 @@ export default function GeometryPage() {
               }`}
             >
               <p className="font-semibold text-slate-800">{card.direction}</p>
-              <p className="text-sm text-slate-500 mt-2">Total lanes: {card.total}</p>
+              <p className="text-sm text-slate-500 mt-2">
+                {card.total === 0 ? "Inactive approach" : `Total lanes: ${card.total}`}
+              </p>
               <p className="text-sm text-slate-500 mt-1">
-                L/T/R: {card.lanes}
+                {card.total === 0 ? "Closed arm" : `L/T/R: ${card.lanes}`}
               </p>
             </button>
           ))}

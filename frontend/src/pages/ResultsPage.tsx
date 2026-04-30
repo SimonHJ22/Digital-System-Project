@@ -4,6 +4,16 @@ import { generateMockResults } from "../utils/mockAnalysis";
 export default function ResultsPage() {
   const { scenario, setResults } = useScenario();
   const results = scenario.results;
+  const activeApproaches = (
+    ["Northbound", "Southbound", "Eastbound", "Westbound"] as const
+  ).filter((approach) => scenario.geometry.approaches[approach].numberOfLanes > 0);
+
+  const approachShortLabels: Record<(typeof activeApproaches)[number], string> = {
+    Northbound: "NB",
+    Southbound: "SB",
+    Eastbound: "EB",
+    Westbound: "WB",
+  };
 
   const kpis = [
     {
@@ -32,8 +42,18 @@ export default function ResultsPage() {
     },
   ];
 
-  const laneGroupRows = results?.laneGroupResults ?? [];
-  const approachRows = results?.approachResults ?? [];
+  const activeLanePrefixes = new Set(
+    activeApproaches.flatMap((approach) => [approach, approachShortLabels[approach]])
+  );
+
+  const laneGroupRows = (results?.laneGroupResults ?? []).filter((row) =>
+    Array.from(activeLanePrefixes).some((prefix) => row.laneGroup.startsWith(prefix))
+  );
+
+  const approachRows = (results?.approachResults ?? []).filter((row) =>
+    activeApproaches.includes(row.approach as (typeof activeApproaches)[number])
+  );
+
 
   return (
     <div className="p-6 space-y-6">

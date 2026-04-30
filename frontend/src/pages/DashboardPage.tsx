@@ -96,11 +96,12 @@ export default function DashboardPage() {
               <span className="font-medium">Current Study:</span> Signalized Intersection Analysis
             </p>
             <p>
-              <span className="font-medium">Status:</span> HCM-oriented frontend integration in progress
+              <span className="font-medium">Status:</span> Operational for 4-leg and 3-leg T signalized intersection analysis
             </p>
             <p>
-              <span className="font-medium">HCM Engine:</span> Explicit lane-group geometry connected, refinement continuing
+              <span className="font-medium">HCM Engine:</span> HCM 2000 Chapter 16 lane-group-oriented analysis connected
             </p>
+
           </div>
         </div>
 
