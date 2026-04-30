@@ -3,10 +3,10 @@ frontend/dist/
 frontend/dist-ssr/
 backend/venv/
 backend/__pycache__/
-tmp_pydeps/
-tmp_video_frames/
-tmp_video_frames_130108/
-tmp_report_copy.docx
 *.log
 *.local
 .DS_Store
+
+# Local temporary tooling folders
+_*/
+tmp*/
