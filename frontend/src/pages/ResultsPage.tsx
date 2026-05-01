@@ -1,5 +1,307 @@
 import { useScenario } from "../features/scenario/useScenario";
 import { generateMockResults } from "../utils/mockAnalysis";
+import type { ApproachResult, LaneGroupResult, ScenarioData, SummaryKPI } from "../types/traffic";
+
+function escapeHtml(value: string): string {
+  return value
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#39;");
+}
+
+function buildSummaryKpiRows(kpis: SummaryKPI): Array<{ label: string; value: string }> {
+  return [
+    { label: "Intersection Delay", value: kpis.intersectionDelay },
+    { label: "Level of Service", value: kpis.levelOfService },
+    { label: "Progression Factor", value: kpis.progressionFactor },
+    { label: "Max Back of Queue", value: kpis.maxBackOfQueue },
+    { label: "Critical v/c Ratio", value: kpis.criticalVCRatio },
+    { label: "Analysis Status", value: kpis.analysisStatus },
+  ];
+}
+
+function buildResultsPrintHtml(
+  scenario: ScenarioData,
+  summaryRows: Array<{ label: string; value: string }>,
+  laneGroupRows: LaneGroupResult[],
+  approachRows: ApproachResult[]
+): string {
+  const printedAt = new Date().toLocaleString();
+  const kpiCardsHtml = summaryRows
+    .map(
+      (row) => `
+        <div class="kpi-card">
+          <div class="kpi-label">${escapeHtml(row.label)}</div>
+          <div class="kpi-value">${escapeHtml(row.value)}</div>
+        </div>
+      `
+    )
+    .join("");
+
+  const laneGroupTableRowsHtml =
+    laneGroupRows.length > 0
+      ? laneGroupRows
+          .map(
+            (row) => `
+              <tr>
+                <td>${escapeHtml(row.laneGroup)}</td>
+                <td>${escapeHtml(row.delay)}</td>
+                <td>${escapeHtml(row.los)}</td>
+                <td>${escapeHtml(row.vcRatio)}</td>
+                <td>${escapeHtml(row.backOfQueue)}</td>
+              </tr>
+            `
+          )
+          .join("")
+      : `
+          <tr>
+            <td colspan="5" class="empty-cell">No lane-group results available.</td>
+          </tr>
+        `;
+
+  const approachTableRowsHtml =
+    approachRows.length > 0
+      ? approachRows
+          .map(
+            (row) => `
+              <tr>
+                <td>${escapeHtml(row.approach)}</td>
+                <td>${escapeHtml(row.delay)}</td>
+                <td>${escapeHtml(row.los)}</td>
+                <td>${escapeHtml(row.adjustedFlow)}</td>
+              </tr>
+            `
+          )
+          .join("")
+      : `
+          <tr>
+            <td colspan="4" class="empty-cell">No approach results available.</td>
+          </tr>
+        `;
+
+  return `
+    <!DOCTYPE html>
+    <html lang="en">
+      <head>
+        <meta charset="UTF-8" />
+        <title>${escapeHtml(scenario.scenarioName)} - Results Report</title>
+        <style>
+          :root {
+            color-scheme: light;
+          }
+
+          * {
+            box-sizing: border-box;
+          }
+
+          body {
+            margin: 0;
+            padding: 32px;
+            font-family: "Segoe UI", Arial, sans-serif;
+            color: #0f172a;
+            background: #ffffff;
+          }
+
+          h1, h2 {
+            margin: 0 0 12px;
+          }
+
+          p {
+            margin: 0;
+          }
+
+          .page-header {
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 2px solid #cbd5e1;
+          }
+
+          .meta-grid,
+          .kpi-grid {
+            display: grid;
+            gap: 12px;
+          }
+
+          .meta-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            margin-top: 16px;
+          }
+
+          .kpi-grid {
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            margin: 20px 0 28px;
+          }
+
+          .meta-card,
+          .kpi-card {
+            border: 1px solid #cbd5e1;
+            border-radius: 14px;
+            padding: 14px 16px;
+            background: #f8fafc;
+          }
+
+          .meta-label,
+          .kpi-label {
+            font-size: 12px;
+            color: #475569;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            margin-bottom: 6px;
+          }
+
+          .meta-value,
+          .kpi-value {
+            font-size: 18px;
+            font-weight: 700;
+          }
+
+          .section {
+            margin-top: 24px;
+          }
+
+          table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 12px;
+          }
+
+          th,
+          td {
+            padding: 10px 12px;
+            border-bottom: 1px solid #cbd5e1;
+            text-align: left;
+            font-size: 14px;
+            vertical-align: top;
+          }
+
+          th {
+            background: #e2e8f0;
+            font-weight: 700;
+          }
+
+          .empty-cell {
+            color: #64748b;
+            font-style: italic;
+          }
+
+          .footer {
+            margin-top: 28px;
+            padding-top: 12px;
+            border-top: 1px solid #cbd5e1;
+            font-size: 12px;
+            color: #64748b;
+          }
+
+          @media print {
+            body {
+              padding: 18px;
+            }
+          }
+        </style>
+      </head>
+      <body>
+        <div class="page-header">
+          <h1>Analysis Results Report</h1>
+          <p>HCM-oriented operational output summary for the selected scenario.</p>
+
+          <div class="meta-grid">
+            <div class="meta-card">
+              <div class="meta-label">Scenario Name</div>
+              <div class="meta-value">${escapeHtml(scenario.scenarioName)}</div>
+            </div>
+            <div class="meta-card">
+              <div class="meta-label">Intersection</div>
+              <div class="meta-value">${escapeHtml(
+                scenario.geometry.intersectionName || "Not set yet"
+              )}</div>
+            </div>
+            <div class="meta-card">
+              <div class="meta-label">Control Type</div>
+              <div class="meta-value">${escapeHtml(scenario.signal.controlType)}</div>
+            </div>
+            <div class="meta-card">
+              <div class="meta-label">Cycle Length</div>
+              <div class="meta-value">${escapeHtml(
+                scenario.signal.cycleLength === ""
+                  ? "-- s"
+                  : `${scenario.signal.cycleLength} s`
+              )}</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="kpi-grid">
+          ${kpiCardsHtml}
+        </div>
+
+        <div class="section">
+          <h2>Lane Group Results</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>Lane Group</th>
+                <th>Delay (s/veh)</th>
+                <th>LOS</th>
+                <th>v/c Ratio</th>
+                <th>Back of Queue</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${laneGroupTableRowsHtml}
+            </tbody>
+          </table>
+        </div>
+
+        <div class="section">
+          <h2>Approach Results</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>Approach</th>
+                <th>Delay (s/veh)</th>
+                <th>LOS</th>
+                <th>Adjusted Flow</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${approachTableRowsHtml}
+            </tbody>
+          </table>
+        </div>
+
+        <div class="footer">
+          Printed: ${escapeHtml(printedAt)}
+        </div>
+      </body>
+    </html>
+  `;
+}
+
+function exportResultsToPdf(
+  scenario: ScenarioData,
+  summaryRows: Array<{ label: string; value: string }>,
+  laneGroupRows: LaneGroupResult[],
+  approachRows: ApproachResult[]
+): void {
+  const exportWindow = window.open("", "_blank");
+
+  if (!exportWindow) {
+    window.alert("The report window was blocked. Please allow pop-ups and try again.");
+    return;
+  }
+
+  exportWindow.document.open();
+  exportWindow.document.write(
+    buildResultsPrintHtml(scenario, summaryRows, laneGroupRows, approachRows)
+  );
+  exportWindow.document.close();
+  exportWindow.focus();
+  window.setTimeout(() => {
+    exportWindow.print();
+  }, 250);
+}
 
 export default function ResultsPage() {
   const { scenario, setResults } = useScenario();
@@ -41,6 +343,7 @@ export default function ResultsPage() {
       value: results?.kpis.analysisStatus ?? "Not Run",
     },
   ];
+  const canExport = Boolean(results);
 
   const activeLanePrefixes = new Set(
     activeApproaches.flatMap((approach) => [approach, approachShortLabels[approach]])
@@ -75,7 +378,15 @@ export default function ResultsPage() {
           >
             Run Analysis
           </button>
-          <button className="px-4 py-2 rounded-xl bg-white border border-slate-300 text-slate-800 font-medium hover:bg-slate-100 transition">
+          <button
+            onClick={() =>
+              results
+                ? exportResultsToPdf(scenario, buildSummaryKpiRows(results.kpis), laneGroupRows, approachRows)
+                : undefined
+            }
+            disabled={!canExport}
+            className="px-4 py-2 rounded-xl bg-white border border-slate-300 text-slate-800 font-medium hover:bg-slate-100 transition disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-white"
+          >
             Export Results
           </button>
         </div>

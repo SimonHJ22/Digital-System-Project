@@ -189,40 +189,10 @@ function createApproachLanesAndGroups(
       addLane(servedMovements)
     );
 
-    const saturationFlowFactorOverrides = {
-      leftTurnFactor:
-        typeof groupInputs.leftTurnFactorOverride === "number"
-          ? clamp(groupInputs.leftTurnFactorOverride, 0.05, 1.5)
-          : undefined,
-      rightTurnFactor:
-        typeof groupInputs.rightTurnFactorOverride === "number"
-          ? clamp(groupInputs.rightTurnFactorOverride, 0.05, 1.5)
-          : undefined,
-      leftTurnPedestrianFactor:
-        typeof groupInputs.leftTurnPedestrianFactorOverride === "number"
-          ? clamp(groupInputs.leftTurnPedestrianFactorOverride, 0.05, 1.5)
-          : undefined,
-      rightTurnPedestrianFactor:
-        typeof groupInputs.rightTurnPedestrianFactorOverride === "number"
-          ? clamp(groupInputs.rightTurnPedestrianFactorOverride, 0.05, 1.5)
-          : undefined,
-    };
-
-    const hasSaturationFlowOverrides = Object.values(
-      saturationFlowFactorOverrides
-    ).some((value) => typeof value === "number");
-
     laneGroups.push({
       id: `${approachId}_lg_${groupKey}`,
       laneIds,
       servedMovements,
-      saturationFlowFactorOverrides: hasSaturationFlowOverrides
-        ? saturationFlowFactorOverrides
-        : undefined,
-      saturationFlowOverrideVehPerHour:
-        typeof groupInputs.saturationFlowOverrideVehPerHour === "number"
-          ? clamp(groupInputs.saturationFlowOverrideVehPerHour, 100, 10000)
-          : undefined,
       leftTurnPhasing: servedMovements.includes("left")
 
         ? groupInputs.leftTurnPhasing

@@ -451,7 +451,7 @@ export function analyzeLaneGroups(
     );
 
     const idealSaturationFlow = calculateIdealSaturationFlow(group.laneIds.length);
-    const calculatedSaturationFlow = calculateAdjustedSaturationFlow(idealSaturationFlow, {
+    const saturationFlow = calculateAdjustedSaturationFlow(idealSaturationFlow, {
       ...approach.saturationFlowFactors,
       laneWidthFactor,
       heavyVehicleFactor,
@@ -464,16 +464,7 @@ export function analyzeLaneGroups(
       rightTurnFactor,
       leftTurnPedestrianFactor,
       rightTurnPedestrianFactor,
-      ...group.saturationFlowFactorOverrides,
     });
-
-    const saturationFlow =
-      typeof group.saturationFlowOverrideVehPerHour === "number" &&
-      group.saturationFlowOverrideVehPerHour > 0
-        ? group.saturationFlowOverrideVehPerHour
-        : calculatedSaturationFlow;
-
-
 
     const capacity = calculateCapacity(saturationFlow, effectiveGreenSeconds, cycleLength);
     const volumeToCapacityRatio = calculateVolumeToCapacityRatio(adjustedVolume, capacity);

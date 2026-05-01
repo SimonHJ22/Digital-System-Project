@@ -27,16 +27,6 @@ export interface LaneGroup {
   leftTurnPedestrianConflict?: number;
   rightTurnProtectedProportion?: number;
   rightTurnPedestrianConflict?: number;
-  saturationFlowFactorOverrides?: Partial<
-    Pick<
-      SaturationFlowAdjustmentFactors,
-      | "leftTurnFactor"
-      | "rightTurnFactor"
-      | "leftTurnPedestrianFactor"
-      | "rightTurnPedestrianFactor"
-    >
-  >;
-  saturationFlowOverrideVehPerHour?: number;
   initialQueueVehicles?: number;
 }
 

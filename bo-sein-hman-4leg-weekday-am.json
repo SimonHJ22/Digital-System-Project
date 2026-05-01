@@ -1,0 +1,596 @@
+{
+  "scenarioName": "Bo Sein Hman 2025 Mitigation AM - 4 Leg",
+  "geometry": {
+    "intersectionName": "Kabar Aye Pagoda Road & Shwegondaing Road",
+    "areaType": "Other",
+    "numberOfApproaches": 4,
+    "selectedApproach": "Northbound",
+    "approaches": {
+      "Northbound": {
+        "numberOfLanes": 2,
+        "laneWidth": 3.35,
+        "grade": 0,
+        "storageLength": 35,
+        "exclusiveLeftTurnLane": true,
+        "exclusiveRightTurnLane": false,
+        "parkingAdjacent": false,
+        "busStopNearStopLine": false,
+        "leftTurnLanes": 1,
+        "throughLanes": 1,
+        "rightTurnLanes": 0,
+        "laneGroupDefinitions": {
+          "left": {
+            "enabled": true,
+            "laneCount": 1,
+            "servedMovements": {
+              "left": true,
+              "through": false,
+              "right": false
+            }
+          },
+          "through": {
+            "enabled": true,
+            "laneCount": 1,
+            "servedMovements": {
+              "left": false,
+              "through": true,
+              "right": true
+            }
+          },
+          "right": {
+            "enabled": false,
+            "laneCount": 0,
+            "servedMovements": {
+              "left": false,
+              "through": false,
+              "right": true
+            }
+          }
+        }
+      },
+      "Southbound": {
+        "numberOfLanes": 2,
+        "laneWidth": 3.96,
+        "grade": 0,
+        "storageLength": 35,
+        "exclusiveLeftTurnLane": true,
+        "exclusiveRightTurnLane": false,
+        "parkingAdjacent": false,
+        "busStopNearStopLine": false,
+        "leftTurnLanes": 1,
+        "throughLanes": 1,
+        "rightTurnLanes": 0,
+        "laneGroupDefinitions": {
+          "left": {
+            "enabled": true,
+            "laneCount": 1,
+            "servedMovements": {
+              "left": true,
+              "through": false,
+              "right": false
+            }
+          },
+          "through": {
+            "enabled": true,
+            "laneCount": 1,
+            "servedMovements": {
+              "left": false,
+              "through": true,
+              "right": true
+            }
+          },
+          "right": {
+            "enabled": false,
+            "laneCount": 0,
+            "servedMovements": {
+              "left": false,
+              "through": false,
+              "right": true
+            }
+          }
+        }
+      },
+      "Eastbound": {
+        "numberOfLanes": 3,
+        "laneWidth": 3.05,
+        "grade": 0,
+        "storageLength": 35,
+        "exclusiveLeftTurnLane": true,
+        "exclusiveRightTurnLane": false,
+        "parkingAdjacent": false,
+        "busStopNearStopLine": false,
+        "leftTurnLanes": 1,
+        "throughLanes": 2,
+        "rightTurnLanes": 0,
+        "laneGroupDefinitions": {
+          "left": {
+            "enabled": true,
+            "laneCount": 1,
+            "servedMovements": {
+              "left": true,
+              "through": false,
+              "right": false
+            }
+          },
+          "through": {
+            "enabled": true,
+            "laneCount": 2,
+            "servedMovements": {
+              "left": false,
+              "through": true,
+              "right": true
+            }
+          },
+          "right": {
+            "enabled": false,
+            "laneCount": 0,
+            "servedMovements": {
+              "left": false,
+              "through": false,
+              "right": true
+            }
+          }
+        }
+      },
+      "Westbound": {
+        "numberOfLanes": 4,
+        "laneWidth": 3.05,
+        "grade": 0,
+        "storageLength": 35,
+        "exclusiveLeftTurnLane": true,
+        "exclusiveRightTurnLane": true,
+        "parkingAdjacent": false,
+        "busStopNearStopLine": false,
+        "leftTurnLanes": 1,
+        "throughLanes": 2,
+        "rightTurnLanes": 1,
+        "laneGroupDefinitions": {
+          "left": {
+            "enabled": true,
+            "laneCount": 1,
+            "servedMovements": {
+              "left": true,
+              "through": false,
+              "right": false
+            }
+          },
+          "through": {
+            "enabled": true,
+            "laneCount": 2,
+            "servedMovements": {
+              "left": false,
+              "through": true,
+              "right": false
+            }
+          },
+          "right": {
+            "enabled": true,
+            "laneCount": 1,
+            "servedMovements": {
+              "left": false,
+              "through": false,
+              "right": true
+            }
+          }
+        }
+      }
+    }
+  },
+  "traffic": {
+    "approachDirection": "Northbound",
+    "approaches": {
+      "Northbound": {
+        "analysisPeriodHours": 0.25,
+        "peakHourFactor": 0.94,
+        "heavyVehiclesPercent": 6,
+        "arrivalType": 3,
+        "leftTurnVolume": 110,
+        "throughVolume": 237,
+        "rightTurnVolume": 368,
+        "pedestrianVolume": 0,
+        "bicycleVolume": 0,
+        "parkingManeuvers": 0,
+        "busesStopping": 0,
+        "rightTurnOnRedPermitted": true,
+        "observedRTORVolume": 47,
+        "laneGroups": {
+          "left": {
+            "leftTurnPhasing": "protected-permitted",
+            "leftTurnProtectedProportion": 0.5,
+            "leftTurnOpposingFlowVehPerHour": 241,
+            "leftTurnPedestrianConflict": 0,
+            "rightTurnProtectedProportion": "",
+            "rightTurnPedestrianConflict": "",
+            "initialQueueVehicles": 0
+          },
+          "through": {
+            "leftTurnPhasing": "protected",
+            "leftTurnProtectedProportion": 1,
+            "leftTurnOpposingFlowVehPerHour": "",
+            "leftTurnPedestrianConflict": "",
+            "rightTurnProtectedProportion": 0,
+            "rightTurnPedestrianConflict": 0,
+            "initialQueueVehicles": 0
+          },
+          "right": {
+            "leftTurnPhasing": "protected",
+            "leftTurnProtectedProportion": 1,
+            "leftTurnOpposingFlowVehPerHour": "",
+            "leftTurnPedestrianConflict": "",
+            "rightTurnProtectedProportion": "",
+            "rightTurnPedestrianConflict": "",
+            "initialQueueVehicles": 0
+          }
+        }
+      },
+      "Southbound": {
+        "analysisPeriodHours": 0.25,
+        "peakHourFactor": 0.96,
+        "heavyVehiclesPercent": 0,
+        "arrivalType": 3,
+        "leftTurnVolume": 352,
+        "throughVolume": 241,
+        "rightTurnVolume": 169,
+        "pedestrianVolume": 0,
+        "bicycleVolume": 0,
+        "parkingManeuvers": 0,
+        "busesStopping": 0,
+        "rightTurnOnRedPermitted": true,
+        "observedRTORVolume": 21,
+        "laneGroups": {
+          "left": {
+            "leftTurnPhasing": "protected-permitted",
+            "leftTurnProtectedProportion": 0.5,
+            "leftTurnOpposingFlowVehPerHour": 237,
+            "leftTurnPedestrianConflict": 0,
+            "rightTurnProtectedProportion": "",
+            "rightTurnPedestrianConflict": "",
+            "initialQueueVehicles": 0
+          },
+          "through": {
+            "leftTurnPhasing": "protected",
+            "leftTurnProtectedProportion": 1,
+            "leftTurnOpposingFlowVehPerHour": "",
+            "leftTurnPedestrianConflict": "",
+            "rightTurnProtectedProportion": 0,
+            "rightTurnPedestrianConflict": 0,
+            "initialQueueVehicles": 0
+          },
+          "right": {
+            "leftTurnPhasing": "protected",
+            "leftTurnProtectedProportion": 1,
+            "leftTurnOpposingFlowVehPerHour": "",
+            "leftTurnPedestrianConflict": "",
+            "rightTurnProtectedProportion": "",
+            "rightTurnPedestrianConflict": "",
+            "initialQueueVehicles": 0
+          }
+        }
+      },
+      "Eastbound": {
+        "analysisPeriodHours": 0.25,
+        "peakHourFactor": 0.91,
+        "heavyVehiclesPercent": 4,
+        "arrivalType": 3,
+        "leftTurnVolume": 279,
+        "throughVolume": 1138,
+        "rightTurnVolume": 67,
+        "pedestrianVolume": 0,
+        "bicycleVolume": 0,
+        "parkingManeuvers": 0,
+        "busesStopping": 0,
+        "rightTurnOnRedPermitted": true,
+        "observedRTORVolume": 4,
+        "laneGroups": {
+          "left": {
+            "leftTurnPhasing": "protected-permitted",
+            "leftTurnProtectedProportion": 0.5,
+            "leftTurnOpposingFlowVehPerHour": 1065,
+            "leftTurnPedestrianConflict": 0,
+            "rightTurnProtectedProportion": "",
+            "rightTurnPedestrianConflict": "",
+            "initialQueueVehicles": 0
+          },
+          "through": {
+            "leftTurnPhasing": "protected",
+            "leftTurnProtectedProportion": 1,
+            "leftTurnOpposingFlowVehPerHour": "",
+            "leftTurnPedestrianConflict": "",
+            "rightTurnProtectedProportion": 0,
+            "rightTurnPedestrianConflict": 0,
+            "initialQueueVehicles": 0
+          },
+          "right": {
+            "leftTurnPhasing": "protected",
+            "leftTurnProtectedProportion": 1,
+            "leftTurnOpposingFlowVehPerHour": "",
+            "leftTurnPedestrianConflict": "",
+            "rightTurnProtectedProportion": "",
+            "rightTurnPedestrianConflict": "",
+            "initialQueueVehicles": 0
+          }
+        }
+      },
+      "Westbound": {
+        "analysisPeriodHours": 0.25,
+        "peakHourFactor": 0.85,
+        "heavyVehiclesPercent": 4,
+        "arrivalType": 3,
+        "leftTurnVolume": 993,
+        "throughVolume": 1065,
+        "rightTurnVolume": 929,
+        "pedestrianVolume": 0,
+        "bicycleVolume": 0,
+        "parkingManeuvers": 0,
+        "busesStopping": 0,
+        "rightTurnOnRedPermitted": false,
+        "observedRTORVolume": "",
+        "laneGroups": {
+          "left": {
+            "leftTurnPhasing": "protected-permitted",
+            "leftTurnProtectedProportion": 0.5,
+            "leftTurnOpposingFlowVehPerHour": 1138,
+            "leftTurnPedestrianConflict": 0,
+            "rightTurnProtectedProportion": "",
+            "rightTurnPedestrianConflict": "",
+            "initialQueueVehicles": 0
+          },
+          "through": {
+            "leftTurnPhasing": "protected",
+            "leftTurnProtectedProportion": 1,
+            "leftTurnOpposingFlowVehPerHour": "",
+            "leftTurnPedestrianConflict": "",
+            "rightTurnProtectedProportion": "",
+            "rightTurnPedestrianConflict": "",
+            "initialQueueVehicles": 0
+          },
+          "right": {
+            "leftTurnPhasing": "protected",
+            "leftTurnProtectedProportion": 1,
+            "leftTurnOpposingFlowVehPerHour": "",
+            "leftTurnPedestrianConflict": "",
+            "rightTurnProtectedProportion": 0,
+            "rightTurnPedestrianConflict": 0,
+            "initialQueueVehicles": 0
+          }
+        }
+      }
+    }
+  },
+  "signal": {
+    "controlType": "Actuated",
+    "numberOfPhases": 8,
+    "pedestrianPushButtonEnabled": false,
+    "cycleLength": 120,
+    "analysisPeriodHours": 0.25,
+    "minimumPedestrianGreen": 7,
+    "phases": [
+      {
+        "phaseNumber": 6,
+        "greenTime": 40,
+        "yellowAllRed": 6,
+        "protectedMovements": "EB TH/RT",
+        "movementPermissions": {
+          "Northbound": {
+            "left": false,
+            "through": false,
+            "right": false
+          },
+          "Southbound": {
+            "left": false,
+            "through": false,
+            "right": false
+          },
+          "Eastbound": {
+            "left": false,
+            "through": true,
+            "right": true
+          },
+          "Westbound": {
+            "left": false,
+            "through": false,
+            "right": false
+          }
+        }
+      },
+      {
+        "phaseNumber": 2,
+        "greenTime": 48,
+        "yellowAllRed": 6,
+        "protectedMovements": "WB TH/RT",
+        "movementPermissions": {
+          "Northbound": {
+            "left": false,
+            "through": false,
+            "right": false
+          },
+          "Southbound": {
+            "left": false,
+            "through": false,
+            "right": false
+          },
+          "Eastbound": {
+            "left": false,
+            "through": false,
+            "right": false
+          },
+          "Westbound": {
+            "left": false,
+            "through": true,
+            "right": true
+          }
+        }
+      },
+      {
+        "phaseNumber": 8,
+        "greenTime": 31,
+        "yellowAllRed": 6,
+        "protectedMovements": "NB TH/RT",
+        "movementPermissions": {
+          "Northbound": {
+            "left": false,
+            "through": true,
+            "right": true
+          },
+          "Southbound": {
+            "left": false,
+            "through": false,
+            "right": false
+          },
+          "Eastbound": {
+            "left": false,
+            "through": false,
+            "right": false
+          },
+          "Westbound": {
+            "left": false,
+            "through": false,
+            "right": false
+          }
+        }
+      },
+      {
+        "phaseNumber": 4,
+        "greenTime": 38,
+        "yellowAllRed": 6,
+        "protectedMovements": "SB TH/RT",
+        "movementPermissions": {
+          "Northbound": {
+            "left": false,
+            "through": false,
+            "right": false
+          },
+          "Southbound": {
+            "left": false,
+            "through": true,
+            "right": true
+          },
+          "Eastbound": {
+            "left": false,
+            "through": false,
+            "right": false
+          },
+          "Westbound": {
+            "left": false,
+            "through": false,
+            "right": false
+          }
+        }
+      },
+      {
+        "phaseNumber": 1,
+        "greenTime": 23,
+        "yellowAllRed": 4,
+        "protectedMovements": "EB LT",
+        "movementPermissions": {
+          "Northbound": {
+            "left": false,
+            "through": false,
+            "right": false
+          },
+          "Southbound": {
+            "left": false,
+            "through": false,
+            "right": false
+          },
+          "Eastbound": {
+            "left": true,
+            "through": false,
+            "right": false
+          },
+          "Westbound": {
+            "left": false,
+            "through": false,
+            "right": false
+          }
+        }
+      },
+      {
+        "phaseNumber": 5,
+        "greenTime": 31,
+        "yellowAllRed": 4,
+        "protectedMovements": "WB LT",
+        "movementPermissions": {
+          "Northbound": {
+            "left": false,
+            "through": false,
+            "right": false
+          },
+          "Southbound": {
+            "left": false,
+            "through": false,
+            "right": false
+          },
+          "Eastbound": {
+            "left": false,
+            "through": false,
+            "right": false
+          },
+          "Westbound": {
+            "left": true,
+            "through": false,
+            "right": false
+          }
+        }
+      },
+      {
+        "phaseNumber": 3,
+        "greenTime": 11,
+        "yellowAllRed": 4,
+        "protectedMovements": "NB LT",
+        "movementPermissions": {
+          "Northbound": {
+            "left": true,
+            "through": false,
+            "right": false
+          },
+          "Southbound": {
+            "left": false,
+            "through": false,
+            "right": false
+          },
+          "Eastbound": {
+            "left": false,
+            "through": false,
+            "right": false
+          },
+          "Westbound": {
+            "left": false,
+            "through": false,
+            "right": false
+          }
+        }
+      },
+      {
+        "phaseNumber": 7,
+        "greenTime": 18,
+        "yellowAllRed": 4,
+        "protectedMovements": "SB LT",
+        "movementPermissions": {
+          "Northbound": {
+            "left": false,
+            "through": false,
+            "right": false
+          },
+          "Southbound": {
+            "left": true,
+            "through": false,
+            "right": false
+          },
+          "Eastbound": {
+            "left": false,
+            "through": false,
+            "right": false
+          },
+          "Westbound": {
+            "left": false,
+            "through": false,
+            "right": false
+          }
+        }
+      }
+    ],
+    "notes": "Imported from pages 1-3 of the Bo Sein Hman 2025 Build with Mitigation Weekday AM Synchro report. Expected reference summary from the report: HCM 2000 control delay 276.4 s/veh, LOS F, v/c 2.38. Lane groups and approach volumes were mapped as closely as possible. EB, NB, and SB right turns were mapped as shared through-right groups because the report shows zero standalone saturation flow for EBR, NBR, and SBR. Signal phases preserve reported lane-group split references; because the current app assigns each approach to the first served phase during HCM analysis, exact Synchro agreement should be treated as approximate."
+  },
+  "results": null
+}

@@ -1,5 +1,5 @@
 {
-  "scenarioName": "Bo Sein Hman 2025 Mitigation AM - 3 Leg T (Calibrated)",
+  "scenarioName": "Bo Sein Hman 2025 Mitigation AM - 3 Leg T",
   "geometry": {
     "intersectionName": "Shwegondaing Road & Bo Sein Hman Street",
     "areaType": "Other",
@@ -201,11 +201,6 @@
             "leftTurnPedestrianConflict": "",
             "rightTurnProtectedProportion": "",
             "rightTurnPedestrianConflict": "",
-            "leftTurnFactorOverride": "",
-            "rightTurnFactorOverride": "",
-            "leftTurnPedestrianFactorOverride": "",
-            "rightTurnPedestrianFactorOverride": "",
-            "saturationFlowOverrideVehPerHour": "",
             "initialQueueVehicles": 0
           },
           "through": {
@@ -215,11 +210,6 @@
             "leftTurnPedestrianConflict": "",
             "rightTurnProtectedProportion": "",
             "rightTurnPedestrianConflict": "",
-            "leftTurnFactorOverride": "",
-            "rightTurnFactorOverride": "",
-            "leftTurnPedestrianFactorOverride": "",
-            "rightTurnPedestrianFactorOverride": "",
-            "saturationFlowOverrideVehPerHour": "",
             "initialQueueVehicles": 0
           },
           "right": {
@@ -229,11 +219,6 @@
             "leftTurnPedestrianConflict": "",
             "rightTurnProtectedProportion": "",
             "rightTurnPedestrianConflict": "",
-            "leftTurnFactorOverride": "",
-            "rightTurnFactorOverride": "",
-            "leftTurnPedestrianFactorOverride": "",
-            "rightTurnPedestrianFactorOverride": "",
-            "saturationFlowOverrideVehPerHour": "",
             "initialQueueVehicles": 0
           }
         }
@@ -260,11 +245,6 @@
             "leftTurnPedestrianConflict": 0,
             "rightTurnProtectedProportion": 0,
             "rightTurnPedestrianConflict": 0,
-            "leftTurnFactorOverride": "",
-            "rightTurnFactorOverride": "",
-            "leftTurnPedestrianFactorOverride": "",
-            "rightTurnPedestrianFactorOverride": "",
-            "saturationFlowOverrideVehPerHour": 1866,
             "initialQueueVehicles": 0
           },
           "through": {
@@ -274,11 +254,6 @@
             "leftTurnPedestrianConflict": "",
             "rightTurnProtectedProportion": "",
             "rightTurnPedestrianConflict": "",
-            "leftTurnFactorOverride": "",
-            "rightTurnFactorOverride": "",
-            "leftTurnPedestrianFactorOverride": "",
-            "rightTurnPedestrianFactorOverride": "",
-            "saturationFlowOverrideVehPerHour": "",
             "initialQueueVehicles": 0
           },
           "right": {
@@ -288,11 +263,6 @@
             "leftTurnPedestrianConflict": "",
             "rightTurnProtectedProportion": "",
             "rightTurnPedestrianConflict": "",
-            "leftTurnFactorOverride": "",
-            "rightTurnFactorOverride": "",
-            "leftTurnPedestrianFactorOverride": "",
-            "rightTurnPedestrianFactorOverride": "",
-            "saturationFlowOverrideVehPerHour": "",
             "initialQueueVehicles": 0
           }
         }
@@ -319,11 +289,6 @@
             "leftTurnPedestrianConflict": "",
             "rightTurnProtectedProportion": "",
             "rightTurnPedestrianConflict": "",
-            "leftTurnFactorOverride": "",
-            "rightTurnFactorOverride": "",
-            "leftTurnPedestrianFactorOverride": "",
-            "rightTurnPedestrianFactorOverride": "",
-            "saturationFlowOverrideVehPerHour": "",
             "initialQueueVehicles": 0
           },
           "through": {
@@ -333,11 +298,6 @@
             "leftTurnPedestrianConflict": 0,
             "rightTurnProtectedProportion": "",
             "rightTurnPedestrianConflict": "",
-            "leftTurnFactorOverride": "",
-            "rightTurnFactorOverride": "",
-            "leftTurnPedestrianFactorOverride": "",
-            "rightTurnPedestrianFactorOverride": "",
-            "saturationFlowOverrideVehPerHour": 3737,
             "initialQueueVehicles": 0
           },
           "right": {
@@ -347,11 +307,6 @@
             "leftTurnPedestrianConflict": "",
             "rightTurnProtectedProportion": "",
             "rightTurnPedestrianConflict": "",
-            "leftTurnFactorOverride": "",
-            "rightTurnFactorOverride": "",
-            "leftTurnPedestrianFactorOverride": "",
-            "rightTurnPedestrianFactorOverride": "",
-            "saturationFlowOverrideVehPerHour": "",
             "initialQueueVehicles": 0
           }
         }
@@ -378,11 +333,6 @@
             "leftTurnPedestrianConflict": "",
             "rightTurnProtectedProportion": "",
             "rightTurnPedestrianConflict": "",
-            "leftTurnFactorOverride": "",
-            "rightTurnFactorOverride": "",
-            "leftTurnPedestrianFactorOverride": "",
-            "rightTurnPedestrianFactorOverride": "",
-            "saturationFlowOverrideVehPerHour": "",
             "initialQueueVehicles": 0
           },
           "through": {
@@ -392,11 +342,6 @@
             "leftTurnPedestrianConflict": "",
             "rightTurnProtectedProportion": "",
             "rightTurnPedestrianConflict": "",
-            "leftTurnFactorOverride": "",
-            "rightTurnFactorOverride": "",
-            "leftTurnPedestrianFactorOverride": "",
-            "rightTurnPedestrianFactorOverride": "",
-            "saturationFlowOverrideVehPerHour": 3209,
             "initialQueueVehicles": 0
           },
           "right": {
@@ -406,11 +351,6 @@
             "leftTurnPedestrianConflict": "",
             "rightTurnProtectedProportion": 0,
             "rightTurnPedestrianConflict": 0,
-            "leftTurnFactorOverride": "",
-            "rightTurnFactorOverride": "",
-            "leftTurnPedestrianFactorOverride": "",
-            "rightTurnPedestrianFactorOverride": "",
-            "saturationFlowOverrideVehPerHour": 1507,
             "initialQueueVehicles": 0
           }
         }
@@ -427,7 +367,7 @@
     "phases": [
       {
         "phaseNumber": 6,
-        "greenTime": 67.8,
+        "greenTime": 69,
         "yellowAllRed": 6,
         "protectedMovements": "EB LT/TH",
         "movementPermissions": {
@@ -455,7 +395,7 @@
       },
       {
         "phaseNumber": 2,
-        "greenTime": 67.8,
+        "greenTime": 59,
         "yellowAllRed": 6,
         "protectedMovements": "WB TH/RT",
         "movementPermissions": {
@@ -483,7 +423,7 @@
       },
       {
         "phaseNumber": 7,
-        "greenTime": 33,
+        "greenTime": 39,
         "yellowAllRed": 6,
         "protectedMovements": "SB LT/RT",
         "movementPermissions": {
@@ -510,7 +450,7 @@
         }
       }
     ],
-    "notes": "Calibrated version of the Bo Sein Hman 2025 Mitigation AM 3-leg T test case. This keeps the same geometry and demand mapping as the raw import, but applies report-based lane-group saturation flow overrides and effective green values from page 6 for closer comparison against the Synchro HCM 2000 output."
+    "notes": "Imported from pages 4-6 of the Bo Sein Hman 2025 Build with Mitigation Weekday AM Synchro report. Expected reference summary from the report: HCM 2000 control delay 155.2 s/veh, LOS F, v/c 1.47. This was mapped as a 3-leg T with the Northbound arm closed. Eastbound was mapped as a shared left-through group because page 6 shows zero standalone EBL saturation flow. Southbound was mapped as a shared left-right group because page 6 shows zero standalone SBR saturation flow. The current app uses simplified per-approach phase assignment during HCM analysis, so exact Synchro agreement should be treated as approximate."
   },
   "results": null
 }

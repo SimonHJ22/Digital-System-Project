@@ -40,11 +40,6 @@ export interface LaneGroupInputSettings {
   leftTurnPedestrianConflict: number | "";
   rightTurnProtectedProportion: number | "";
   rightTurnPedestrianConflict: number | "";
-  leftTurnFactorOverride: number | "";
-  rightTurnFactorOverride: number | "";
-  leftTurnPedestrianFactorOverride: number | "";
-  rightTurnPedestrianFactorOverride: number | "";
-  saturationFlowOverrideVehPerHour: number | "";
   initialQueueVehicles: number | "";
 }
 

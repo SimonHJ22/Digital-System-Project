@@ -104,31 +104,6 @@ function normalizeLaneGroupInputSettings(
       value.rightTurnPedestrianConflict === ""
         ? value.rightTurnPedestrianConflict
         : fallback.rightTurnPedestrianConflict,
-    leftTurnFactorOverride:
-      typeof value.leftTurnFactorOverride === "number" ||
-      value.leftTurnFactorOverride === ""
-        ? value.leftTurnFactorOverride
-        : fallback.leftTurnFactorOverride,
-    rightTurnFactorOverride:
-      typeof value.rightTurnFactorOverride === "number" ||
-      value.rightTurnFactorOverride === ""
-        ? value.rightTurnFactorOverride
-        : fallback.rightTurnFactorOverride,
-    leftTurnPedestrianFactorOverride:
-      typeof value.leftTurnPedestrianFactorOverride === "number" ||
-      value.leftTurnPedestrianFactorOverride === ""
-        ? value.leftTurnPedestrianFactorOverride
-        : fallback.leftTurnPedestrianFactorOverride,
-    rightTurnPedestrianFactorOverride:
-      typeof value.rightTurnPedestrianFactorOverride === "number" ||
-      value.rightTurnPedestrianFactorOverride === ""
-        ? value.rightTurnPedestrianFactorOverride
-        : fallback.rightTurnPedestrianFactorOverride,
-    saturationFlowOverrideVehPerHour:
-      typeof value.saturationFlowOverrideVehPerHour === "number" ||
-      value.saturationFlowOverrideVehPerHour === ""
-        ? value.saturationFlowOverrideVehPerHour
-        : fallback.saturationFlowOverrideVehPerHour,
     initialQueueVehicles:
       typeof value.initialQueueVehicles === "number" || value.initialQueueVehicles === ""
         ? value.initialQueueVehicles
